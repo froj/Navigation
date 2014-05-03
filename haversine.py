@@ -21,7 +21,7 @@ def parse_coordinate(input_str):
     latitude = 0
     longitude = 0
 
-    pattern = "^\s*(\d+)[°\s]+([0-5]??\d)(['\.\s])\s*(0?)(\d*)\"?\s*([NnSs-]?)\s*(\d+)[°\s]+([0-5]??\d)(['\.\s])\s*(0?)(\d*)\"?\s*([EeWe-]?)"
+    pattern = "^\s*(\d+)[°\s]+([0-5]??\d)(['\.\s])\s*(0?)(\d*)'?\"?\s*([NnSs-]?)\s*(\d+)[°\s]+([0-5]??\d)(['\.\s])\s*(0?)(\d*)'?\"?\s*([EeWe-]?)"
     result = re.match(pattern, input_str)
 
     if result:
@@ -35,7 +35,8 @@ def parse_coordinate(input_str):
                 latitude += int(result.group(5)) / 3600
 
         elif result.group(3) == ".":
-            latitude += int(result.group(5)) / 60000
+            if not result.group(4) == '0':
+                latitude += int(result.group(5)) / 60000
 
         direction = result.group(6)
 
@@ -53,7 +54,8 @@ def parse_coordinate(input_str):
                 longitude += int(result.group(11)) / 3600
 
         elif result.group(9) == ".":
-            longitude += int(result.group(11)) / 60000
+            if not result.group(10) == '0':
+                longitude += int(result.group(11)) / 60000
 
         direction = result.group(12)
 
